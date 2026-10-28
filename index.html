@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CharterGuard — DAO Charter Tribunal</title>
+    <meta
+      name="description"
+      content="DAO proposals judged against their own charter. File a proposal with the charter text and optional sources; GenLayer validators compare them article by article and rule on compliance."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module" crossorigin src="./assets/index-D9vqzxll.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-CZ81Qp_z.css">
+  </head>
+  <body>
+    <canvas id="golddust" aria-hidden="true"></canvas>
+
+    <header class="hero">
+      <div class="colonnade" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="hero-text">
+        <p class="eyebrow">DAO CHARTER TRIBUNAL · THE CHAMBER IS IN SESSION</p>
+        <h1>CharterGuard</h1>
+        <p class="tagline">
+          A charter is a promise a DAO makes to itself — spending caps,
+          procedure, a ban on self-dealing. CharterGuard holds proposals
+          to that promise: file the proposal with the charter text, and
+          let GenLayer validators compare them article by article and
+          rule on compliance, on-chain, where neither side can rewrite
+          the verdict.
+        </p>
+      </div>
+      <div class="hero-stats">
+        <div><strong id="hero-count">–</strong><span>proposals on docket</span></div>
+        <div><strong id="hero-compliant">–</strong><span>compliant</span></div>
+        <div><strong id="hero-violation">–</strong><span>violation</span></div>
+      </div>
+      <div class="gavel" aria-hidden="true">🔨</div>
+    </header>
+
+    <main class="wrap">
+      <section class="panel connect-panel">
+        <button id="wallet-btn" class="btn navy">Connect wallet</button>
+        <form id="contract-form" class="contract-form">
+          <label for="contract-address">Contract address</label>
+          <input id="contract-address" spellcheck="false" placeholder="0x…" />
+          <button class="btn ghost" type="submit">Load chamber</button>
+          <button id="demo-btn" class="btn ghost" type="button">Use demo contract</button>
+          <a id="explorer-link" class="explorer" target="_blank" rel="noreferrer">View on explorer ↗</a>
+        </form>
+        <p id="chain-note" class="muted"></p>
+      </section>
+
+      <section class="panel">
+        <ol class="steps">
+          <li data-step="sign"><span>01</span> Sign</li>
+          <li data-step="sent"><span>02</span> Sent</li>
+          <li data-step="consensus"><span>03</span> Consensus</li>
+          <li data-step="final"><span>04</span> Ruled</li>
+        </ol>
+        <p id="tx-status" class="tx"></p>
+        <p id="error" class="error" hidden></p>
+      </section>
+
+      <section class="panel">
+        <div class="docket-head">
+          <h2>The Chamber Record</h2>
+          <div class="filters" role="group" aria-label="Filter proposals">
+            <button data-filter="ALL" aria-pressed="true">All</button>
+            <button data-filter="FILED" aria-pressed="false">Filed</button>
+            <button data-filter="COMPLIANT" aria-pressed="false">Compliant</button>
+            <button data-filter="VIOLATION" aria-pressed="false">Violation</button>
+            <button data-filter="UNCLEAR" aria-pressed="false">Unclear</button>
+          </div>
+          <button id="refresh-btn" class="btn ghost">Refresh record</button>
+        </div>
+        <p class="ledger">
+          Total <strong id="count">–</strong> · Compliant
+          <strong id="count-compliant">–</strong> · Violation
+          <strong id="count-violation">–</strong> · Unclear
+          <strong id="count-unclear">–</strong>
+        </p>
+        <div id="proposal-list" class="proposal-list"></div>
+      </section>
+
+      <section class="panel dossier">
+        <h2>File a proposal — the brief</h2>
+        <p class="muted">
+          Paste the proposal text and the charter text exactly as
+          written. Sources are optional: add them only when a
+          compliance question depends on a live fact, such as a
+          treasury balance or a registry entry. Validators rule on
+          the texts first.
+        </p>
+        <form id="create-form" class="form-grid">
+          <label>Proposal ID <span>≤ 64 chars, letters / digits / - / _</span>
+            <input id="f-id" required maxlength="64" placeholder="e.g. grants-q4-2026" />
+          </label>
+          <label>Title <span>1–128 chars</span>
+            <input id="f-title" required maxlength="128" placeholder="e.g. Q4 community grants round" />
+          </label>
+          <label class="wide">Proposal text <span>10–2000 chars</span>
+            <textarea id="f-proposal" required maxlength="2000" rows="4" placeholder="What the proposal does, with amounts, dates and procedure."></textarea>
+            <span class="counter" id="c-proposal"></span>
+          </label>
+          <label class="wide">Charter text <span>10–3000 chars — the supreme text</span>
+            <textarea id="f-charter" required maxlength="3000" rows="5" placeholder="The charter articles the proposal must comply with."></textarea>
+            <span class="counter" id="c-charter"></span>
+          </label>
+          <label class="wide">
+            <button id="charter-preset" class="btn ghost" type="button">Use the Meridian demo charter</button>
+          </label>
+          <label>Source 1 <span>optional, https only</span>
+            <input id="f-s1" placeholder="https://…" />
+          </label>
+          <label>Source 2 <span>optional</span>
+            <input id="f-s2" placeholder="https://…" />
+          </label>
+          <label>Source 3 <span>optional</span>
+            <input id="f-s3" placeholder="https://…" />
+          </label>
+          <button class="btn crimson wide" type="submit">File proposal on-chain</button>
+        </form>
+      </section>
+
+      <footer class="muted small">
+        CharterGuard rules on compliance; it does not execute
+        proposals and it moves no funds. Rulings judge the filed
+        texts and sources only. Stable Studionet · test network
+        only, no real funds.
+      </footer>
+    </main>
+
+  </body>
+</html>
